@@ -1,0 +1,12 @@
+.popup__submit_disabled {
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background-color: transparent;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: .2;
+}

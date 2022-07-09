@@ -1,0 +1,13 @@
+.profile__add-button-icon {
+  margin: 0;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+}
+
+@media screen and (max-width: 950px) {
+  .profile__add-button-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

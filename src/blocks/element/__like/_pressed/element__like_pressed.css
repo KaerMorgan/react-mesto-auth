@@ -1,0 +1,4 @@
+.element__like_pressed {
+  background-image: url(../../../../images/liked.svg);
+  opacity: 1;
+}

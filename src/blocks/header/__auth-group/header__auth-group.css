@@ -1,0 +1,5 @@
+.header__auth-group {
+  display: flex;
+  justify-content: space-between;
+  max-width: 221px;
+}

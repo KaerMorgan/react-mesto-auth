@@ -1,0 +1,21 @@
+.header__logo {
+  padding: 0;
+  margin: 0 0 41px;
+}
+
+.header__logo path {
+  fill: #fff;
+}
+
+@media screen and (max-width: 950px) {
+  .header__logo {
+    margin: 0 0 32px 27px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .header__logo {
+    width: 103.74px;
+    height: 24.4px;
+  }
+}

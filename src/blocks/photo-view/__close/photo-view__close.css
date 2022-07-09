@@ -1,0 +1,25 @@
+.photo-view__close {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: -40px;
+  right: -40px;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.photo-view__close:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 580px) {
+  .photo-view__close {
+    right: 0;
+    width: 20px;
+    height: 20px;
+  }
+}
