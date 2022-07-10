@@ -1,3 +1,5 @@
+export const BASE_URL = "https://auth.nomoreparties.co";
+
 class Api {
   constructor(config) {
     this._url = config.url;
@@ -103,11 +105,61 @@ class Api {
   // }
 }
 
-const api = new Api({
+export const api = new Api({
   url: "https://mesto.nomoreparties.co/v1/cohort-41/",
   headers: {
     authorization: "1eb86aa4-a0d2-4f05-8adf-01200df0c7d3",
   },
 });
 
-export default api;
+export const register = (password, email) => {
+  return fetch(`${BASE_URL}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      password: password,
+      email: email,
+    }),
+  })
+    .then((response) => {
+      try {
+        if (response.ok) {
+          return response.json();
+        }
+      } catch (e) {
+        return e;
+      }
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+};
+
+export const login = (password, email) => {
+  return fetch(`${BASE_URL}/signin`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      password: password,
+      email: email,
+    }),
+  })
+    .then((response) => {
+      try {
+        if (response.status === 200) {
+          return response.json();
+        }
+      } catch (e) {
+        return e;
+      }
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => console.log(err));
+};

@@ -66,6 +66,7 @@
 @import url(./blocks/popup/__submit/popup__submit.css);
 @import url(./blocks/popup/__submit/_disabled/popup__submit_disabled.css);
 @import url(./blocks/popup/__heading/popup__heading.css);
+@import url(./blocks/popup/__registration-image/popup__registration-image.css);
 
 /* Photo preview popup */
 

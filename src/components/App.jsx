@@ -10,10 +10,11 @@ import ImagePopup from "./ImagePopup";
 import Register from "./Register";
 import Login from "./Login";
 
-import api from "../utils/Api";
+import { api, register, login } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [cards, setCards] = React.useState([]);
@@ -22,9 +23,60 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const history = useHistory();
+
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+  }
+
+  function handleRegisterSubmit(e) {
+    e.preventDefault();
+    register(password, email).then((res) => {
+      if (res) {
+        setEmail("");
+        setPassword("");
+        history.push("/login");
+        setSuccess(true);
+        setIsInfoTooltipOpen(true);
+      } else {
+        setEmail("");
+        setPassword("");
+        setSuccess(false);
+        setIsInfoTooltipOpen(true);
+      }
+    });
+  }
+
+  function handleLoginSubmit(e) {
+    e.preventDefault();
+    login(password, email).then((data) => {
+      if (data) {
+        setEmail("");
+        setPassword("");
+
+        localStorage.setItem("token", data.token);
+        setIsLoggedIn(true);
+        history.push("/");
+      } else {
+        setEmail("");
+        setPassword("");
+        setSuccess(false);
+        setIsInfoTooltipOpen(true);
+      }
+    });
+  }
 
   React.useEffect(() => {
     Promise.all([api.getUserInfo(), api.getCardList()])
@@ -39,6 +91,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsInfoTooltipOpen(false);
     setSelectedCard({});
   }
 
@@ -114,11 +167,31 @@ function App() {
       <Header isLoggedIn={isLoggedIn} />
       <Switch>
         <Route path="/sign-in">
-          {isLoggedIn ? <Redirect to="/" /> : <Login />}
+          {isLoggedIn ? (
+            <Redirect to="/" />
+          ) : (
+            <Login
+              onSubmit={handleLoginSubmit}
+              email={email}
+              password={password}
+              onEmailChange={handleEmailChange}
+              onPasswordChange={handlePasswordChange}
+            />
+          )}
         </Route>
 
         <Route path="/sign-up">
-          {isLoggedIn ? <Redirect to="/" /> : <Register />}
+          {isLoggedIn ? (
+            <Redirect to="/" />
+          ) : (
+            <Register
+              onSubmit={handleRegisterSubmit}
+              email={email}
+              password={password}
+              onEmailChange={handleEmailChange}
+              onPasswordChange={handlePasswordChange}
+            />
+          )}
         </Route>
 
         <ProtectedRoute
@@ -159,11 +232,13 @@ function App() {
         onAddPlace={handleAddPlaceSubmit}
       />
 
-      <PopupWithForm
-        name="delete"
-        title="Вы уверены?"
-        submitButtonText="Да"
-      ></PopupWithForm>
+      <PopupWithForm name="delete" title="Вы уверены?" submitButtonText="Да" />
+
+      <InfoTooltip
+        success={success}
+        isOpened={isInfoTooltipOpen}
+        onClose={closeAllPopups}
+      />
 
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
     </CurrentUserContext.Provider>

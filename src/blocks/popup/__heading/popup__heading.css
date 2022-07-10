@@ -1,5 +1,5 @@
 .popup__heading {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: "Inter", "Arial", sans-serif;
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
@@ -9,6 +9,7 @@
   margin: 34px 36px 54px;
   text-align: start;
   align-self: flex-start;
+  text-align: center;
 }
 
 @media screen and (max-width: 580px) {
