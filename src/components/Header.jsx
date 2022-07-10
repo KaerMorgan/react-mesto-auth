@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import headerLogo from "../images/header__logo.svg";
 
-function Header({ isLoggedIn, mail, onExit }) {
+function Header({ isLoggedIn, email, onExit }) {
   return (
     <header className="header">
       <img src={headerLogo} alt="Место" className="header__logo" />
       <div className="header__auth-group">
         {isLoggedIn ? (
           <>
-            <p>{mail}</p>
+            <p>{email}</p>
             <Link className="page__link" to="/sign-in" onClick={onExit}>
               Выйти
             </Link>
