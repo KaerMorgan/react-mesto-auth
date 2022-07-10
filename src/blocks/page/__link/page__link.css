@@ -5,6 +5,11 @@
   text-decoration: none;
   cursor: pointer;
   transition: all 0.6s ease;
+  font-family: "Inter", "Arial", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
 }
 
 .page__link:hover {

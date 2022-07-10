@@ -164,7 +164,7 @@ export const login = (password, email) => {
     .catch((err) => console.log(err));
 };
 
-export const getContent = (token) => {
+export const checkToken = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {

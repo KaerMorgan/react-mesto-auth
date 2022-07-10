@@ -4,3 +4,17 @@
   align-items: center;
   column-gap: 24px;
 }
+
+@media screen and (max-width: 950px) {
+  .header__auth-group {
+    margin: 0 27px 0 0;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .header__auth-group {
+    width: 100%;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

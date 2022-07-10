@@ -1,30 +1,72 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import headerLogo from "../images/header__logo.svg";
+import burger from "../images/hamburger.png";
+import HeaderAuthGroup from "./HeaderAuthGroup";
+import buttonClose from "../images/button_close.svg";
 
 function Header({ isLoggedIn, email, onExit }) {
+  const [width, setWidth] = React.useState(0);
+  const [isMenuShown, setIsMenuShown] = React.useState(false);
+
+  function resize() {
+    setWidth(window.innerWidth);
+    if (width > 580) {
+      setIsMenuShown(false);
+    }
+  }
+
+  function handleMenuClick() {
+    setIsMenuShown(!isMenuShown);
+  }
+
+  React.useEffect(() => {
+    window.addEventListener("resize", resize);
+    setWidth(window.innerWidth);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+    };
+  }, [width]);
+
   return (
-    <header className="header">
-      <img src={headerLogo} alt="Место" className="header__logo" />
-      <div className="header__auth-group">
-        {isLoggedIn ? (
-          <>
-            <p>{email}</p>
-            <Link className="page__link" to="/sign-in" onClick={onExit}>
-              Выйти
-            </Link>
-          </>
-        ) : window.location.href.includes("sign-in") ? (
-          <Link className="page__link" to="/sign-up">
-            Зарегистрироваться
-          </Link>
+    <>
+      {/* Пришлось сделать кучу проверок чтобы интерфейс не ломался
+      и вынести пару элементов в отдельный компонент, чтобы код не разрастался. Мне стыдно :(  */}
+      {isMenuShown && isLoggedIn && (
+        <HeaderAuthGroup
+          isLoggedIn={isLoggedIn}
+          email={email}
+          onExit={onExit}
+          width={width}
+        />
+      )}
+      <header className="header">
+        <img src={headerLogo} alt="Место" className="header__logo" />
+        {width <= 580 && isLoggedIn ? (
+          isMenuShown ? (
+            <img
+              className="header__burger-image"
+              onClick={handleMenuClick}
+              src={buttonClose}
+              alt="Закрыть меню"
+            />
+          ) : (
+            <img
+              className="header__burger-image"
+              onClick={handleMenuClick}
+              src={burger}
+              alt="Открыть меню"
+            />
+          )
         ) : (
-          <Link className="page__link" to="/sign-in">
-            Войти
-          </Link>
+          <HeaderAuthGroup
+            isLoggedIn={isLoggedIn}
+            email={email}
+            onExit={onExit}
+          />
         )}
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
 

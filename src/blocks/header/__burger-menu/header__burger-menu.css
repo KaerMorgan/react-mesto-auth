@@ -1,0 +1,6 @@
+@media screen and (max-width: 580px) {
+  .header__burger-menu {
+    border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+    padding: 40px 0;
+  }
+}

@@ -10,7 +10,7 @@ import ImagePopup from "./ImagePopup";
 import Register from "./Register";
 import Login from "./Login";
 
-import { api, register, login, getContent } from "../utils/Api";
+import { api, register, login, checkToken } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
@@ -35,7 +35,7 @@ function App() {
 
   React.useEffect(() => {
     if (token) {
-      Promise.all([getContent(token), api.getUserInfo(), api.getCardList()])
+      Promise.all([checkToken(token), api.getUserInfo(), api.getCardList()])
         .then(([tokenData, userData, cardData]) => {
           setEmail(tokenData.data.email);
           setCurrentUser(userData);
@@ -44,7 +44,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [isLoggedIn]);
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);

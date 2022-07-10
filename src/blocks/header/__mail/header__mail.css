@@ -1,11 +1,25 @@
 .header__mail {
-  font-family: "Inter";
+  font-family: "Inter", "Arial", sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-
   text-align: right;
-
   color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 950px) {
+  .header__mail {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .header__mail {
+    font-size: 18px;
+    line-height: 22px;
+  }
 }

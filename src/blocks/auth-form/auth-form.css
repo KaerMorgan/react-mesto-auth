@@ -4,6 +4,13 @@
   justify-content: space-between;
   max-width: 358px;
   margin: 0 auto;
-  padding: 0;
-  height: calc(100vh - 179px);
+  padding: 40px 0;
+  /* height: calc(100vh - 179px); */
+}
+
+@media screen and (max-width: 580px) {
+  .auth-form {
+    max-width: 260px;
+    /* max-height: 550px; */
+  }
 }

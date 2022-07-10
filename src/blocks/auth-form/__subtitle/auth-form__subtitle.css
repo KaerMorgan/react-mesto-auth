@@ -10,3 +10,10 @@
 
   color: #ffffff;
 }
+
+@media screen and (max-width: 580px) {
+  .auth-form__subtitle {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

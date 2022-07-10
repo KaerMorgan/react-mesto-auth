@@ -4,13 +4,16 @@
 @import url(./vendor/fonts/fonts.css);
 @import url(./blocks/page/page.css);
 @import url(./blocks/page/__link/page__link.css);
+@import url(./blocks/page/__link/_type_login/page__link_type_login.css);
 
 /* Header */
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__auth-group/header__auth-group.css);
-
+@import url(./blocks/header/__mail/header__mail.css);
+@import url(./blocks/header/__burger-image/header__burger-image.css);
+@import url(./blocks/header/__burger-menu/header__burger-menu.css);
 /* Auth */
 
 @import url(./blocks/auth-form/auth-form.css);

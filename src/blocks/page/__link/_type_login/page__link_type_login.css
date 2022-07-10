@@ -1,0 +1,7 @@
+@media screen and (max-width: 450px) {
+  .page__link_type_login {
+    font-size: 14px;
+    line-height: 17px;
+    align-self: flex-end;
+  }
+}
