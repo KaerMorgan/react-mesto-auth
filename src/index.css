@@ -18,6 +18,7 @@
 
 @import url(./blocks/auth-form/auth-form.css);
 @import url(./blocks/auth-form/__title/auth-form__title.css);
+@import url(./blocks/auth-form/__subtitle/auth-form__subtitle.css);
 @import url(./blocks/auth-form/__input/auth-form__input.css);
 @import url(./blocks/auth-form/__button-group/auth-form__button-group.css);
 @import url(./blocks/auth-form/__input-group/auth-form__input-group.css);

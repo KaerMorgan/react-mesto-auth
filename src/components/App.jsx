@@ -152,7 +152,6 @@ function App() {
     login(password, email).then((data) => {
       if (data) {
         setPassword("");
-
         localStorage.setItem("token", data.token);
         setIsLoggedIn(true);
         history.push("/");
@@ -255,11 +254,13 @@ function App() {
         />
       )}
 
-      <InfoTooltip
-        success={success}
-        isOpened={isInfoTooltipOpen}
-        onClose={closeAllPopups}
-      />
+      {!isLoggedIn && (
+        <InfoTooltip
+          success={success}
+          isOpened={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+        />
+      )}
 
       {isLoggedIn && (
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />

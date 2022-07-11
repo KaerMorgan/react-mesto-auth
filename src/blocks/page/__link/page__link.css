@@ -16,3 +16,10 @@
   opacity: 0.6;
   transition: all 0.6s ease;
 }
+
+@media screen and (max-width: 580px) {
+  .page__link {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

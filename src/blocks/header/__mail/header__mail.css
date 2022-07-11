@@ -9,17 +9,3 @@
   margin: 0;
   padding: 0;
 }
-
-@media screen and (max-width: 950px) {
-  .header__mail {
-    font-size: 14px;
-    line-height: 17px;
-  }
-}
-
-@media screen and (max-width: 580px) {
-  .header__mail {
-    font-size: 18px;
-    line-height: 22px;
-  }
-}

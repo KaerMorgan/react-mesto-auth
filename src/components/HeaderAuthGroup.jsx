@@ -1,7 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
+  const history = useHistory();
+  const [urlState, setUrlState] = React.useState();
+
+  React.useEffect(() => {
+    setUrlState(history.location.pathname);
+  }, [history.location.pathname]);
+
   return (
     <div
       className={
@@ -17,7 +24,7 @@ const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
             Выйти
           </Link>
         </>
-      ) : window.location.href.includes("sign-in") ? (
+      ) : urlState === "/sign-in" ? (
         <Link
           className="page__link page__link_type_login"
           style={{ alignSelf: "flex-end" }}
