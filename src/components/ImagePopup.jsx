@@ -1,19 +1,16 @@
 import React from "react";
-import CloseButton from "./CloseButton";
+import Popup from "./Popup";
 
-const ImagePopup = (props) => {
+const ImagePopup = ({ card, onClose, photoViewClass }) => {
   return (
-    <div className={`popup photo-view ${props.card._id && "popup_opened"}`}>
-      <div className="photo-view__container">
-        <CloseButton onClose={props.onClose} />
-        <img
-          src={props.card.link}
-          alt={props.card.name}
-          className="photo-view__image"
-        />
-        <h3 className="photo-view__caption">{props.card.name}</h3>
-      </div>
-    </div>
+    <Popup
+      isOpened={!!card._id}
+      photoViewClass={photoViewClass}
+      onClose={onClose}
+    >
+      <img src={card.link} alt={card.name} className="photo-view__image" />
+      <h3 className="photo-view__caption">{card.name}</h3>
+    </Popup>
   );
 };
 

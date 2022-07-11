@@ -30,8 +30,6 @@ function Header({ isLoggedIn, email, onExit }) {
 
   return (
     <>
-      {/* Пришлось сделать кучу проверок чтобы интерфейс не ломался
-      и вынести пару элементов в отдельный компонент, чтобы код не разрастался. Мне стыдно :(  */}
       {isMenuShown && isLoggedIn && (
         <HeaderAuthGroup
           isLoggedIn={isLoggedIn}
@@ -43,21 +41,12 @@ function Header({ isLoggedIn, email, onExit }) {
       <header className="header">
         <img src={headerLogo} alt="Место" className="header__logo" />
         {width <= 580 && isLoggedIn ? (
-          isMenuShown ? (
-            <img
-              className="header__burger-image"
-              onClick={handleMenuClick}
-              src={buttonClose}
-              alt="Закрыть меню"
-            />
-          ) : (
-            <img
-              className="header__burger-image"
-              onClick={handleMenuClick}
-              src={burger}
-              alt="Открыть меню"
-            />
-          )
+          <img
+            className="header__burger-image"
+            onClick={handleMenuClick}
+            src={isMenuShown ? buttonClose : burger}
+            alt={isMenuShown ? "Закрыть меню" : "Меню"}
+          />
         ) : (
           <HeaderAuthGroup
             isLoggedIn={isLoggedIn}

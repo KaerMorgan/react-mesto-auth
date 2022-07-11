@@ -8,6 +8,7 @@ const Login = ({
   onPasswordChange,
 }) => {
   return (
+    // многовато отличий чтобы перенести компонент Form
     <form className="auth-form" name="register" onSubmit={onSubmit}>
       <div className="auth-form__input-group">
         <h2 className="auth-form__title">Войти</h2>

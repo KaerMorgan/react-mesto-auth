@@ -14,7 +14,7 @@ const InputWithLabel = ({ id, name, type, placeholder, value, onChange }) => {
         type={type}
         value={value || ""}
         minLength="2"
-        maxLength={type === "url" ? "300" : "40"}
+        maxLength={type === "url" ? "300" : "30"}
         placeholder={placeholder}
         onChange={handleChange}
         required

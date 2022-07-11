@@ -1,5 +1,6 @@
 import React from "react";
-import CloseButton from "./CloseButton";
+import Form from "./Form";
+import Popup from "./Popup";
 
 const PopupWithForm = ({
   name,
@@ -11,22 +12,16 @@ const PopupWithForm = ({
   onSubmit,
 }) => {
   return (
-    <div className={`popup popup_type_${name} ${isOpened && "popup_opened"}`}>
-      <div className="popup__container">
-        <CloseButton onClose={onClose} />
-        <form
-          className={`popup__form popup__form_type_${name}`}
-          name={`profile-${name}`}
-          onSubmit={onSubmit}
-        >
-          <h3 className="popup__heading">{title}</h3>
-          {children}
-          <button className="popup__submit" type="submit">
-            {submitButtonText}
-          </button>
-        </form>
-      </div>
-    </div>
+    <Popup isOpened={isOpened} name={name} onClose={onClose}>
+      <Form
+        name={name}
+        onSubmit={onSubmit}
+        title={title}
+        submitButtonText={submitButtonText}
+      >
+        {children}
+      </Form>
+    </Popup>
   );
 };
 

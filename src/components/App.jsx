@@ -10,14 +10,23 @@ import ImagePopup from "./ImagePopup";
 import Register from "./Register";
 import Login from "./Login";
 
-import { api, register, login, checkToken } from "../utils/Api";
+import { api } from "../utils/Api";
+import { auth } from "../utils/Auth";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
 
 function App() {
+  const [currentUser, setCurrentUser] = React.useState({});
+  const token = localStorage.getItem("token");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
   const [cards, setCards] = React.useState([]);
+
+  const [selectedCard, setSelectedCard] = React.useState({});
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
@@ -25,17 +34,16 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+
   const history = useHistory();
-  const token = localStorage.getItem("token");
 
   React.useEffect(() => {
     if (token) {
-      Promise.all([checkToken(token), api.getUserInfo(), api.getCardList()])
+      Promise.all([
+        auth.checkToken(token),
+        api.getUserInfo(),
+        api.getCardList(),
+      ])
         .then(([tokenData, userData, cardData]) => {
           setEmail(tokenData.data.email);
           setCurrentUser(userData);
@@ -131,37 +139,42 @@ function App() {
 
   function handleRegisterSubmit(e) {
     e.preventDefault();
-    register(password, email).then((res) => {
-      if (res) {
-        setEmail("");
-        setPassword("");
-        history.push("/login");
-        setSuccess(true);
+    auth
+      .register(password, email)
+      .then((res) => {
+        if (res) {
+          setEmail("");
+          setPassword("");
+          history.push("/login");
+          setSuccess(true);
+        } else {
+          setSuccess(false);
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
         setIsInfoTooltipOpen(true);
-      } else {
-        setEmail("");
-        setPassword("");
-        setSuccess(false);
-        setIsInfoTooltipOpen(true);
-      }
-    });
+      });
   }
 
   function handleLoginSubmit(e) {
     e.preventDefault();
-    login(password, email).then((data) => {
-      if (data) {
-        setPassword("");
-        localStorage.setItem("token", data.token);
-        setIsLoggedIn(true);
-        history.push("/");
-      } else {
-        setEmail("");
-        setPassword("");
-        setSuccess(false);
-        setIsInfoTooltipOpen(true);
-      }
-    });
+    auth
+      .login(password, email)
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setPassword("");
+          localStorage.setItem("token", data.token);
+          setIsLoggedIn(true);
+          history.push("/");
+          setIsInfoTooltipOpen(true);
+        } else {
+          setSuccess(false);
+          setIsInfoTooltipOpen(true);
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   function handleLogout() {
@@ -220,50 +233,47 @@ function App() {
         </Route>
       </Switch>
 
-      {isLoggedIn && <Footer />}
       {/* Предотвращение отправок формы неавторизованными пользователями */}
       {isLoggedIn && (
-        <EditProfilePopup
-          isOpened={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
-      )}
+        <>
+          <Footer />
+          <EditProfilePopup
+            isOpened={isEditProfilePopupOpen}
+            onClose={closeAllPopups}
+            onUpdateUser={handleUpdateUser}
+          />
 
-      {isLoggedIn && (
-        <EditAvatarPopup
-          isOpened={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
-      )}
+          <EditAvatarPopup
+            isOpened={isEditAvatarPopupOpen}
+            onClose={closeAllPopups}
+            onUpdateAvatar={handleUpdateAvatar}
+          />
 
-      {isLoggedIn && (
-        <AddPlacePopup
-          isOpened={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
-      )}
+          <AddPlacePopup
+            isOpened={isAddPlacePopupOpen}
+            onClose={closeAllPopups}
+            onAddPlace={handleAddPlaceSubmit}
+          />
 
-      {isLoggedIn && (
-        <PopupWithForm
-          name="delete"
-          title="Вы уверены?"
-          submitButtonText="Да"
-        />
-      )}
+          <PopupWithForm
+            name="delete"
+            title="Вы уверены?"
+            submitButtonText="Да"
+          />
 
+          <ImagePopup
+            card={selectedCard}
+            onClose={closeAllPopups}
+            photoViewClass="photo-view"
+          />
+        </>
+      )}
       {!isLoggedIn && (
         <InfoTooltip
           success={success}
           isOpened={isInfoTooltipOpen}
           onClose={closeAllPopups}
         />
-      )}
-
-      {isLoggedIn && (
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       )}
     </CurrentUserContext.Provider>
   );

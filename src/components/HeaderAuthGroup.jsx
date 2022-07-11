@@ -1,14 +1,7 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 
-const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
-  const history = useHistory();
-  const [urlState, setUrlState] = React.useState();
-
-  React.useEffect(() => {
-    setUrlState(history.location.pathname);
-  }, [history.location.pathname]);
-
+const HeaderAuthGroup = ({ email, onExit, width }) => {
   return (
     <div
       className={
@@ -17,14 +10,15 @@ const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
           : "header__auth-group"
       }
     >
-      {isLoggedIn ? (
-        <>
-          <p className="header__mail">{email}</p>
-          <Link className="page__link" to="/sign-in" onClick={onExit}>
-            Выйти
-          </Link>
-        </>
-      ) : urlState === "/sign-in" ? (
+      {/* Гениально 👏 */}
+      <Route exact path="/">
+        <p className="header__mail">{email}</p>
+        <button className="header__logout" onClick={onExit}>
+          Выйти
+        </button>
+      </Route>
+
+      <Route path="/sign-in">
         <Link
           className="page__link page__link_type_login"
           style={{ alignSelf: "flex-end" }}
@@ -32,7 +26,9 @@ const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
         >
           Регистрация
         </Link>
-      ) : (
+      </Route>
+
+      <Route path="/sign-up">
         <Link
           className="page__link page__link_type_login"
           style={{ alignSelf: "flex-end" }}
@@ -40,7 +36,7 @@ const HeaderAuthGroup = ({ isLoggedIn, email, onExit, width }) => {
         >
           Войти
         </Link>
-      )}
+      </Route>
     </div>
   );
 };
