@@ -27,10 +27,8 @@ function App() {
   const [cards, setCards] = React.useState([]);
 
   const [selectedCard, setSelectedCard] = React.useState({});
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -39,20 +37,16 @@ function App() {
 
   React.useEffect(() => {
     if (token) {
-      Promise.all([
-        auth.checkToken(token),
-        api.getUserInfo(),
-        api.getCardList(),
-      ])
-        .then(([tokenData, userData, cardData]) => {
-          setEmail(tokenData.data.email);
+      Promise.all([api.getUserInfo(), api.getCardList()])
+        .then(([userData, cardData]) => {
+          setEmail(userData.email);
           setCurrentUser(userData);
           setCards(cardData);
           setIsLoggedIn(true);
         })
         .catch((err) => console.log(err));
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, token]);
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
@@ -79,13 +73,11 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((item) => item._id === currentUser._id);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
     api
       .handleCardLike(card._id, !isLiked)
       .then((newCard) => {
-        setCards((prevState) =>
-          prevState.map((c) => (c._id === card._id ? newCard : c))
-        );
+        setCards((prevState) => prevState.map((c) => (c._id === card._id ? newCard : c)));
       })
       .catch((err) => console.log(err));
   }
@@ -162,19 +154,17 @@ function App() {
     auth
       .login(password, email)
       .then((data) => {
-        if (data) {
-          console.log(data);
-          setPassword("");
-          localStorage.setItem("token", data.token);
-          setIsLoggedIn(true);
-          history.push("/");
-          setIsInfoTooltipOpen(true);
-        } else {
-          setSuccess(false);
-          setIsInfoTooltipOpen(true);
-        }
+        setPassword("");
+        localStorage.setItem("token", data.token);
+        setIsLoggedIn(true);
+        history.push("/");
+        setIsInfoTooltipOpen(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setSuccess(false);
+        setIsInfoTooltipOpen(true);
+        console.log(err);
+      });
   }
 
   function handleLogout() {
@@ -187,9 +177,9 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <Header isLoggedIn={isLoggedIn} onExit={handleLogout} email={email} />
       <Switch>
-        <Route path="/sign-in">
+        <Route path='/sign-in'>
           {isLoggedIn ? (
-            <Redirect to="/" />
+            <Redirect to='/' />
           ) : (
             <Login
               onSubmit={handleLoginSubmit}
@@ -201,9 +191,9 @@ function App() {
           )}
         </Route>
 
-        <Route path="/sign-up">
+        <Route path='/sign-up'>
           {isLoggedIn ? (
-            <Redirect to="/" />
+            <Redirect to='/' />
           ) : (
             <Register
               onSubmit={handleRegisterSubmit}
@@ -216,7 +206,7 @@ function App() {
         </Route>
 
         <ProtectedRoute
-          path="/"
+          path='/'
           isLoggedIn={isLoggedIn}
           component={Main}
           onEditProfile={handleEditProfileClick}
@@ -228,9 +218,7 @@ function App() {
           onCardDelete={handleCardDelete}
         />
 
-        <Route path="*">
-          {isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
-        </Route>
+        <Route path='*'>{isLoggedIn ? <Redirect to='/' /> : <Redirect to='/sign-in' />}</Route>
       </Switch>
 
       {/* Предотвращение отправок формы неавторизованными пользователями */}
@@ -255,25 +243,13 @@ function App() {
             onAddPlace={handleAddPlaceSubmit}
           />
 
-          <PopupWithForm
-            name="delete"
-            title="Вы уверены?"
-            submitButtonText="Да"
-          />
+          <PopupWithForm name='delete' title='Вы уверены?' submitButtonText='Да' />
 
-          <ImagePopup
-            card={selectedCard}
-            onClose={closeAllPopups}
-            photoViewClass="photo-view"
-          />
+          <ImagePopup card={selectedCard} onClose={closeAllPopups} photoViewClass='photo-view' />
         </>
       )}
       {!isLoggedIn && (
-        <InfoTooltip
-          success={success}
-          isOpened={isInfoTooltipOpen}
-          onClose={closeAllPopups}
-        />
+        <InfoTooltip success={success} isOpened={isInfoTooltipOpen} onClose={closeAllPopups} />
       )}
     </CurrentUserContext.Provider>
   );

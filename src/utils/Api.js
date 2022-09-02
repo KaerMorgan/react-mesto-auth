@@ -1,7 +1,6 @@
 class Api {
   constructor(config) {
     this._url = config.url;
-    this._headers = config.headers;
   }
 
   _checkErorr(res) {
@@ -13,51 +12,51 @@ class Api {
 
   // GET
   getCardList() {
-    return fetch(`${this._url}cards`, {
+    return fetch(`${this._url}/cards`, {
       method: "GET",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
     }).then(this._checkErorr);
   }
 
   // POST
   addCard(cardData) {
-    return fetch(`${this._url}cards`, {
+    return fetch(`${this._url}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
       body: JSON.stringify(cardData),
     }).then(this._checkErorr);
   }
 
   // DELETE cards/cardId
   deleteCard(id) {
-    return fetch(`${this._url}cards/${id}`, {
+    return fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
     }).then(this._checkErorr);
   }
 
   // GET
   getUserInfo() {
-    return fetch(`${this._url}users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: "GET",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
     }).then(this._checkErorr);
   }
 
   // PATCH
   changeUserInfo(userData) {
-    return fetch(`${this._url}users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
       body: JSON.stringify(userData),
     }).then(this._checkErorr);
   }
 
   // PATCH
   changeAvatar(avatar) {
-    return fetch(`${this._url}users/me/avatar`, {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: { "Content-Type": "application/json", authorization: this._getToken() },
       body: JSON.stringify(avatar),
     }).then(this._checkErorr);
   }
@@ -65,40 +64,22 @@ class Api {
   // universal function for like\delete like from card
   handleCardLike(id, method) {
     if (method) {
-      return fetch(`${this._url}cards/${id}/likes`, {
+      return fetch(`${this._url}/cards/${id}/likes`, {
         method: "PUT",
-        headers: this._headers,
+        headers: { "Content-Type": "application/json", authorization: this._getToken() },
       }).then(this._checkErorr);
     } else {
-      return fetch(`${this._url}cards/${id}/likes`, {
+      return fetch(`${this._url}/cards/${id}/likes`, {
         method: "DELETE",
-        headers: this._headers,
+        headers: { "Content-Type": "application/json", authorization: this._getToken() },
       }).then(this._checkErorr);
     }
   }
 
-  // // PUT
-  // likeCard(id) {
-  //   return fetch(`${this._url}cards/${id}/likes`, {
-  //     method: 'PUT',
-  //     headers: this._headers
-  //   }).then(this._checkErorr)
-  // }
-
-  // // DELETE
-  // removeLike(id) {
-  //   return fetch(`${this._url}cards/${id}/likes`, {
-  //     method: 'DELETE',
-  //     headers: this._headers
-  //   }).then(this._checkErorr)
-  // }
+  _getToken() {
+    return `Bearer ${localStorage.getItem("token")}`;
+  }
 }
 export const api = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-41/",
-  headers: {
-    authorization: "1eb86aa4-a0d2-4f05-8adf-01200df0c7d3",
-    "Content-Type": "application/json",
-  },
+  url: "http://api.morgankatarn.nomoredomains.sbs",
 });
-// Я не использовал this._headers в запросах где нужно было передавать "Content-Type": "application/json",
-// надеюсь ничего плохого не произойдёт если я буду передавать этот заголовок везде
